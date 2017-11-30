@@ -9,6 +9,8 @@ import prev.cxw.employ.dao.AdminDAO;
 import prev.cxw.employ.model.dto.Admin;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -22,7 +24,8 @@ public class ManagerController {
 
     @RequestMapping("/login")
     public String login(@RequestParam("account") String account,
-                        @RequestParam("password")String password){
+                        @RequestParam("password")String password,
+                        HttpServletRequest request){
 
 
         List<Admin> admins = adminDAO.searchAll();
@@ -40,7 +43,9 @@ public class ManagerController {
         if(userAdmin == null){
             return "用户名或密码错误";
         }
-        return JSON.toJSONString(userAdmin);
+        HttpSession httpSession = request.getSession(true);
+        httpSession.setAttribute("adminUser",userAdmin);
+        return "index";
     }
 
 }
