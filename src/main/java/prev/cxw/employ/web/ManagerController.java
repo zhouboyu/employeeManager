@@ -22,7 +22,7 @@ public class ManagerController {
     @Resource
     AdminDAO adminDAO;
 
-    @RequestMapping("/login")
+    @RequestMapping("/doLogin")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password")String password,
                         HttpServletRequest request){
@@ -45,7 +45,19 @@ public class ManagerController {
         }
         HttpSession httpSession = request.getSession(true);
         httpSession.setAttribute("adminUser",userAdmin);
-        return "/index.html";
+        return "home";
+    }
+
+    @RequestMapping("/toLogin")
+    public String test(){
+        return "login";
+    }
+
+    @RequestMapping("/test")
+    public String test(@RequestParam("account") String account,
+                        @RequestParam("password")String password,
+                        HttpServletRequest request){
+        return "home";
     }
 
 }

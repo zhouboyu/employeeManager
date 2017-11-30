@@ -1,11 +1,12 @@
 package prev.cxw.employ.web.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
+import prev.cxw.employ.web.interceptor.LogInInterceptor;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -17,13 +18,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/assets/css/");
-//        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/assets/js/");
-//        super.addResourceHandlers(registry);
-//    }
+    @Bean
+    public LogInInterceptor getLogInInterceptor() {
+        return new LogInInterceptor();
+    }
 
+    public void addInterceptors(InterceptorRegistry registry) {
+        InterceptorRegistration addInterceptor = registry.addInterceptor(getLogInInterceptor());
+
+        // 排除配置
+        addInterceptor.excludePathPatterns("/error**");
+        addInterceptor.excludePathPatterns("/doLogin**");
+        addInterceptor.excludePathPatterns("/toLogin**");
+        addInterceptor.excludePathPatterns("/**.jpg");
+
+        // 拦截配置
+        addInterceptor.addPathPatterns("/**");
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
