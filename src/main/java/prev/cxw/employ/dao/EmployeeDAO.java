@@ -1,12 +1,8 @@
 package prev.cxw.employ.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import prev.cxw.employ.model.dto.Company;
+import org.apache.ibatis.annotations.*;
 import prev.cxw.employ.model.dto.Employee;
-import prev.cxw.employ.model.query.CompanyQuery;
+import prev.cxw.employ.model.query.EmployeeQuery;
 
 import java.util.List;
 
@@ -23,30 +19,27 @@ public interface EmployeeDAO {
      * 查询所有的公司
      * @return
      */
-    @Select("select * from Employee " +
-            " where name like '%#{name}%'" +
-            " and sex = '#{sex}'" +
-            " and idCard like '%#{idCard}%'" +
-            " and address like '%#{address}%'" +
-            "")
-    List<Employee> search(CompanyQuery query);
+    @SelectProvider(type=prev.cxw.employ.dao.sqlprovider.EmployeeSqlProvider.class,
+            method = "searchEmployee")
+    List<Employee> search(EmployeeQuery query);
 
     /**
      * 插入
-     * @param company
+     * @param employee
      */
-    @Insert("insert into Company(name,address,phone,detail) " +
-            " values(#{name},#{address},#{phone},#{detail})")
+    @Insert("insert into Employee(name,idCard,sex,phone,companyId) " +
+            " values(#{name},#{idCard},#{sex},#{phone},#{companyId})")
     @Options(useGeneratedKeys=true,keyColumn="id",keyProperty="id")
-    void insert(Company company);
+    void insert(Employee employee);
 
     /**
      * 更改
-     * @param company
+     * @param employee
      */
-    @Update("update Company " +
-            "set name=#{name},address=#{address},phone=#{phone},detail=#{detail} " +
+    @Update("update Employee " +
+            "set name=#{name},idCard=#{idCard}," +
+            "phone=#{phone},sex=#{sex},companyId=#{companyId} " +
             "where id=#{id}")
-    void save(Company company);
+    void save(Employee employee);
 
 }

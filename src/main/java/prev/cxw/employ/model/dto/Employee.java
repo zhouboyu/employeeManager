@@ -16,6 +16,7 @@ public class Employee {
     private String name;
     private String idCard;
     private int sex;
+    private String phone;
     private int isDeleted;
     private long companyId;
 
