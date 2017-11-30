@@ -15,5 +15,5 @@ import java.util.List;
 
 public interface AdminDAO {
     @Select("select * from Admin")
-    public List<Admin> searchAll();
+    List<Admin> searchAll();
 }
