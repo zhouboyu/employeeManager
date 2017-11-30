@@ -32,7 +32,7 @@ public class ManagerController {
         Admin userAdmin = null;
         for(Admin admin:admins){
             if(admin.getAccount().equals(account)
-                    && userAdmin.getPassword().equals(password)){
+                    && admin.getPassword().equals(password)){
                 userAdmin = admin;
                 break;
             }
