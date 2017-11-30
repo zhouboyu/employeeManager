@@ -45,7 +45,7 @@ public class ManagerController {
         }
         HttpSession httpSession = request.getSession(true);
         httpSession.setAttribute("adminUser",userAdmin);
-        return "index";
+        return "/index.html";
     }
 
 }
