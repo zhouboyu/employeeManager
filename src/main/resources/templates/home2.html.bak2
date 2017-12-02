@@ -16,8 +16,17 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../static/css/homestyle.css"/>
-    <link href="../static/css/metro-icons.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/css/metro-icons.min.css"/>
+    <link rel="stylesheet" href="../static/css/metro-responsive.min.css"/>
+    <link rel="stylesheet" href="../static/css/metro-schemes.css"/>
+    <script src="../static/js/jquery-2.1.3.min.js"/>
     <script src="../static/js/metro.min.js"></script>
+
+
+    <link href="css/metro.css" rel="stylesheet">
+    <link href="css/metro-icons.css" rel="stylesheet">
+    <link href="css/metro-responsive.css" rel="stylesheet">
+    <link href="css/metro-schemes.css" rel="stylesheet">
     <style>
         .tile-area-controls {
             position: fixed;
@@ -25,7 +34,7 @@
             top: 40px;
         }
         body{
-            background-color:#1e0356
+            background-color: #FFFFFF
         }
     </style>
 </head>
@@ -87,6 +96,25 @@
             <span class="hamb-bottom"></span>
         </button>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+
+                    <div class="tile-container bg-darkCobalt" style="width: 640px">
+                        <div class="tile-large bg-lighterBlue" data-role="tile"></div>
+                        <div class="tile-square bg-cobalt" data-role="tile"></div>
+                        <div class="tile-small bg-red" data-role="tile"></div>
+                        <div class="tile-small bg-orange" data-role="tile"></div>
+                        <div class="tile-small bg-green" data-role="tile"></div>
+                        <div class="tile-small bg-pink" data-role="tile"></div>
+                        <div class="tile-wide bg-lightGreen" data-role="tile"></div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- /#wrapper -->
