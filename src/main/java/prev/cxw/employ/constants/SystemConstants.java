@@ -5,6 +5,6 @@ package prev.cxw.employ.constants;
  */
 public class SystemConstants {
 
-    public final static String SESSION_USERKEY = "admminUser";
+    public final static String SESSION_USERKEY = "adminUser";
 
 }

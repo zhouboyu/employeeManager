@@ -1,5 +1,6 @@
 package prev.cxw.employ.web.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import prev.cxw.employ.constants.UserInfo;
@@ -21,8 +22,10 @@ public class LogInInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println(request.getContextPath()+","+request.getRequestURI());
         HttpSession session = request.getSession();
         Object userObj;
+        System.out.println(JSON.toJSONString(session.getAttribute(SESSION_USERKEY)));
         if(null != (userObj = session.getAttribute(SESSION_USERKEY))
                 && userObj instanceof Admin){
             UserInfo.setUser((Admin)userObj);

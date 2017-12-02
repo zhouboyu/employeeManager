@@ -23,6 +23,12 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         return new LogInInterceptor();
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/font/**").addResourceLocations("classpath:/static/fonts/");
+        super.addResourceHandlers(registry);
+    }
+
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration addInterceptor = registry.addInterceptor(getLogInInterceptor());
 

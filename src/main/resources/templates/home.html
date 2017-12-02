@@ -15,11 +15,21 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/css/homestyle.css">
-
-
+    <link rel="stylesheet" href="/css/homestyle.css"/>
+    <link href="/css/metro-icons.min.css" rel="stylesheet"/>
+    <script src="/js/metro.min.js"></script>
+    <style>
+        .tile-area-controls {
+            position: fixed;
+            right: 40px;
+            top: 40px;
+        }
+        body{
+            background-color:#1e0356
+        }
+    </style>
 </head>
-<body>
+<body style="overflow-y: hidden;">
     <div id="wrapper" class="">
         <div class="overlay" style="display: none;"></div>
     
@@ -33,65 +43,55 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="fa fa-fw fa-home"></i> <font size=8>Home</font>
+                        <i class="fa fa-fw fa-home"></i>管理员设置
                     </a>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-folder"></i> Page one</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-file-o"></i> Second page</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-cog"></i> Third page</a>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Dropdown heading</li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-bank"></i> Page four</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-dropbox"></i> Page 5</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-twitter"></i> Last page</a>
-                </li>
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-folder"></i> Page one</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-file-o"></i> Second page</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-cog"></i> Third page</a>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                  <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Dropdown <span class="caret"></span></a>-->
+                  <!--<ul class="dropdown-menu" role="menu">-->
+                    <!--<li class="dropdown-header">Dropdown heading</li>-->
+                    <!--<li><a href="#">Action</a></li>-->
+                    <!--<li><a href="#">Another action</a></li>-->
+                    <!--<li><a href="#">Something else here</a></li>-->
+                    <!--<li><a href="#">Separated link</a></li>-->
+                    <!--<li><a href="#">One more separated link</a></li>-->
+                  <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-bank"></i> Page four</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-dropbox"></i> Page 5</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="fa fa-fw fa-twitter"></i> Last page</a>-->
+                <!--</li>-->
             </ul>
         </nav>
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-          <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
-            <span class="hamb-top"></span>
-            <span class="hamb-middle"></span>
-            <span class="hamb-bottom"></span>
-          </button>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <h1 class="page-header">Awesome Bootstrap 3 Sidebar Navigation</h1>  
-                        <p class="lead">Originally authored by <a href="http://bootsnipp.com/maridlcrmn" target="_blank">maridlcrmn</a> on Bootsnipp and then converted to Less and customized further by j_holtslander who is building a collection of great Bootstrap 3 navbars.
-                        </p>
-                        1
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
+            <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+             </button>
 
+        </div>
     </div>
     <!-- /#wrapper -->
     <script type="text/javascript">
+        //<![CDATA[
         $(document).ready(function () {
           var trigger = $('.hamburger'),
               overlay = $('.overlay'),
@@ -121,6 +121,17 @@
                 $('#wrapper').toggleClass('toggled');
           });  
         });
+
+        function showCharms(id){
+            var  charm = $(id).data("charm");
+            if (charm.element.data("opened") === true) {
+                charm.close();
+            } else {
+                charm.open();
+            }
+        }
+
+        //]]>
     </script>
 </body>
 </html>
