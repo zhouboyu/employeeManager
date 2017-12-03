@@ -29,6 +29,10 @@ public interface CompanyDAO {
             "")
     List<Company> search(CompanyQuery query);
 
+
+    @Select("select * from Company ")
+    List<Company> searchAll();
+
     /**
      * 插入
      * @param company

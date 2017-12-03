@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>spring boot index</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>spring boot index</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/metro.min.css"/>
+    <link rel="stylesheet" href="/css/metro-icons.min.css"/>
+    <link rel="stylesheet" href="/css/metro-responsive.min.css"/>
+    <link rel="stylesheet" href="/css/metro-schemes.min.css"/>
+    <script src="../static/js/metro.min.js"></script>
+    <style>
+        /*body{*/
+            /*background-color: #FFFFFF*/
+        /*}*/
+    </style>
+
+    <script>
+        $(function () {
+            $("#companyDiv").click(function(){
+
+            });
+
+            $("#employeeDiv").click(function(){
+                location.href="/toUserList";
+            });
+        })
+
+    </script>
+</head>
+<body>
+    <div class="tile-area tile-area-scheme-dark fg-white" style="height: 100%; max-height: 100% !important;">
+    <div class="container page-content">
+        <h1>
+            <!--<a href="index.html" class="nav-button transform"><span></span></a>-->
+            <span class="mif-arrow-left"></span>
+            &nbsp;面板
+        </h1>
+    </div>
+    <div class="tile-area no-padding">
+        <div class="tile-group double" style="left: 0px;">
+            <span class="tile-group-title">General</span>
+
+            <div class="tile-container">
+                <div class="tile bg-indigo fg-white" id="employeeDiv"
+                   data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-users"></span>
+                        <span class="tile-label">员工管理</span>
+                    </div>
+
+                </div>
+
+                <div class="tile bg-darkBlue fg-white" data-role="tile" id="companyDiv"
+                     style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-widgets"></span>
+                        <span class="tile-label">公司管理</span>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="tile-group double">
+            <span class="tile-group-title">敬请期待</span>
+            <div class="tile-small bg-blue" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                <div class="tile-content iconic">
+                    <img src="/img/outlook.png" class="icon"/>
+                </div>
+            </div>
+            <div class="tile-small bg-darkBlue" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                <div class="tile-content iconic">
+                    <img src="/img/word.png" class="icon"/>
+                </div>
+            </div>
+            <div class="tile-small bg-green" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                <div class="tile-content iconic">
+                    <img src="/img/excel.png" class="icon"/>
+                </div>
+            </div>
+            <div class="tile-small bg-red" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                <div class="tile-content iconic">
+                    <img src="/img/access.png" class="icon"/>
+                </div>
+            </div>
+            <div class="tile-small bg-orange" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
+                <div class="tile-content iconic">
+                    <img src="/img/powerpoint.png" class="icon"/>
+                </div>
+            </div>
+            <div class="tile-small bg-amber fg-white" data-role="tile">
+                <div class="tile-content iconic">
+                    <span class="icon mif-video-camera"></span>
+                </div>
+            </div>
+            <div class="tile-small bg-green fg-white" data-role="tile">
+                <div class="tile-content iconic">
+                    <span class="icon mif-gamepad"></span>
+                </div>
+            </div>
+            <div class="tile-small bg-pink fg-white" data-role="tile">
+                <div class="tile-content iconic">
+                    <span class="icon mif-headphones"></span>
+                </div>
+            </div>
+            <div class="tile-small bg-yellow fg-white" data-role="tile">
+                <div class="tile-content iconic">
+                    <span class="icon mif-lock"></span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+</body>
+</html>

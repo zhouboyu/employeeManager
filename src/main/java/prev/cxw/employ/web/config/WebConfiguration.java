@@ -37,7 +37,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/doLogin**");
         addInterceptor.excludePathPatterns("/toLogin**");
         addInterceptor.excludePathPatterns("/**.jpg");
-
+        addInterceptor.excludePathPatterns("/**.png");
         // 拦截配置
         addInterceptor.addPathPatterns("/**");
     }

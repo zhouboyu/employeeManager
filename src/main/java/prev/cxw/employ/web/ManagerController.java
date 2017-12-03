@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import prev.cxw.employ.dao.AdminDAO;
+import prev.cxw.employ.dao.CompanyDAO;
 import prev.cxw.employ.model.dto.Admin;
 
 import javax.annotation.Resource;
@@ -29,6 +30,8 @@ public class ManagerController {
 
     @Resource
     AdminDAO adminDAO;
+    @Resource
+    CompanyDAO companyDAO;
 
     @RequestMapping(path = "/doLogin",method = RequestMethod.POST)
     @ResponseBody
@@ -77,11 +80,14 @@ public class ManagerController {
         return "home";
     }
 
-    @RequestMapping("/test")
-    public String test(@RequestParam("account") String account,
-                        @RequestParam("password")String password,
-                        HttpServletRequest request){
-        return "home";
+    @RequestMapping("/toUserList")
+    public String toUserLIst(){
+        return "userList";
     }
 
+    @RequestMapping("/userListInfo")
+    @ResponseBody
+    public Object userListInfo(){
+        return of("success",true,"coms",companyDAO.searchAll());
+    }
 }
