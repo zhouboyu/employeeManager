@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>spring boot index</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>spring boot index</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/metro.min.css"/>
+    <link rel="stylesheet" href="/css/metro-icons.min.css"/>
+    <link rel="stylesheet" href="/css/metro-responsive.min.css"/>
+    <link rel="stylesheet" href="/css/metro-schemes.min.css"/>
+    <script src="/js/metro.min.js"></script>
+    <style>
+        .d-menu li a {
+            min-width: 8rem;
+        }
+    </style>
+    <script>
+        //<![CDATA[
+        $(function () {
+            $.ajaxSetup({
+                async: false
+            });
+            $.post("/userListInfo",{},function (data) {
+                console.log(data);
+                $.ajaxSetup({
+                    async: true
+                });
+                if(data.success){
+                    $("#comselect").empty().append("<option value='empty'></option>");
+                    $(data.coms).each(function(i,e){
+                        $("#comselect").append("<option value='"+e.id+"'>"+e.name+"</option>");
+                    });
+                }
+            });
+            searchEmployee();
+        })
+        function clickSearch() {
+            console.log("1")
+            metroDialog.toggle('#dialog9');
+            $("#dialogTitle").text("设置查询条件");
+            $("#actionBtn").text("增加");
+            $("#actionBtn").attr("action","search");
+        }
+        function clickAdd() {
+            console.log("1")
+            metroDialog.toggle('#dialog9');
+            $("#dialogTitle").text("新增用户");
+            $("#actionBtn").text("增加");
+            $("#actionBtn").attr("action","add");
+        }
+        function doAction(){
+            var action = $("#actionBtn").attr("action");
+            if(action == "add"){
+                if($("#name").val()==''){
+                    $.Notify({
+                        caption: '添加错误！',
+                        content: '员工名称不能为空',
+                        type: 'alert'
+                    });
+                    return;
+                }
+                if($("#idCard").val()==''){
+                    $.Notify({
+                        caption: '添加错误！',
+                        content: '员工身份证不能为空',
+                        type: 'alert'
+                    });
+                    return;
+                }
+
+                if($("#phone").val()==''){
+                    $.Notify({
+                        caption: '添加错误！',
+                        content: '员工手机不能为空',
+                        type: 'alert'
+                    });
+                    return;
+                }
+                if($("#comselect").val()=='empty'){
+                    $.Notify({
+                        caption: '添加错误！',
+                        content: '请选择公司！',
+                        type: 'alert'
+                    });
+                    return;
+                }
+                $.post("/addemployee",{
+                    "name":$("#name").val(),
+                    "phone":$("#phone").val(),
+                    "idCard":$("#idCard").val(),
+                    "sex":$("#sex").val(),
+                    "comselect":$("#comselect").val()
+                },function (data) {
+                    if(!data.success){
+                        $.Notify({
+                            caption: '添加错误！',
+                            content: data.msg,
+                            type: 'alert'
+                        });
+                    }else{
+                        $.Notify({
+                            caption: '添加成功！',
+                            content: '添加成功！',
+                            type: 'success'
+                        });
+                        searchEmployee();
+                    }
+                })
+            }else{
+                searchEmployee();
+            }
+        }
+
+        function searchEmployee(){
+            $.post("/queryEmployee",{
+                "name":$("#name").val(),
+                "phone":$("#phone").val(),
+                "idCard":$("#idCard").val(),
+                "sex":$("#sex").val(),
+                "comselect":$("#comselect").val()
+            },function (data) {
+                console.log(data);
+                if(!data.success){
+                    $.Notify({
+                        caption: '查询错误！',
+                        content: data.msg,
+                        type: 'alert'
+                    });
+                }else{
+                    var htmlstr = "";
+                    $(data.list).each(function (i,v) {
+                        console.log(v);
+                       htmlstr+="<tr>" +
+                                        "<td>"+v.name+"</td>"+
+//                                        "<td>"+v.idCard+"</td>"+
+                                        "<td>"+(v.sex?"男":"女")+"</td>"+
+                                        "<td style=\"white-space:nowrap;overflow: hidden;text-overflow:ellipsis\">"+v.phone+"</td>"+
+                                        "<td>"+v.company.name+"</td>"+
+                                        "<td>"+
+                                            "<button class=\"button dropdown-toggle\">查看</button>"+
+//                                            "<div class=\"dropdown-button place-right\">"+
+//                                                "<button class=\"button dropdown-toggle\">操作</button>"+
+//                                                "<ul class=\"split-content d-menu place-right\" data-role=\"dropdown\">"+
+//                                                "<li><a href=\"#\">查看</a></li>"+
+//                                                "<li><a href=\"#\">编辑</a></li>"+
+//                                                "</ul>"+
+//                                            "</div>"+
+                                        "</td>"+
+                               "</tr>";
+                        console.log(htmlstr);
+                    });
+                    console.log(htmlstr);
+                    $("#employListTr").html(htmlstr);
+                }
+            });
+        }
+
+        //]]>
+    </script>
+</head>
+<body>
+
+<div class="container page-content">
+    <h3>
+        <span class="mif-arrow-left"></span>
+        &nbsp;员工管理
+    </h3>
+</div>
+<div class="app-bar" data-role="appbar">
+    <button id="addBar" class="button lighten place-right" onclick="clickAdd()">
+        <span class="mif-plus"></span>添加</button>
+    <button id="searchBar" class="button lighten place-right" onclick="clickSearch()">
+        <span class="mif-search"></span>查询</button>
+</div>
+
+<!-- Default -->
+<div class="panel" style="margin:4px">
+    <div class="heading">
+        <span class="title">员工列表</span>
+    </div>
+    <div class="content">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="sortable-column">名称</th>
+                <!--<th class="sortable-column">身份证</th>-->
+                <th class="sortable-column">性别</th>
+                <th class="sortable-column">电话</th>
+                <th class="sortable-column">所属公司</th>
+                <th class="sortable-column">操作</th>
+            </tr>
+            </thead>
+            <tbody id="employListTr">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<div data-role="dialog" id="dialog9" class=" dialog"
+     data-close-button="true" data-overlay="true" data-overlay-color="op-dark"
+     data-overlay-click-close="true"
+     style="width: auto; height: auto;  ">
+    <!--padding20-->
+    <!--left: 267px; top: 372px;-->
+    <h3 id="dialogTitle">设置查询条件</h3>
+    <p>
+    <div class="example" data-text="">
+        <div class="grid">
+            <div class="row">
+                <div class="cell">
+                    <label>员工姓名</label>
+                    <div class="input-control text full-size">
+                        <input type="text" id="name"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label>员工身份证</label>
+                    <div class="input-control password full-size">
+                        <input type="text" id="idCard"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label>员工电话</label>
+                    <div class="input-control password full-size">
+                        <input type="text" id="phone"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label>员工性别</label>
+                    <!-- Radio button -->
+                    <div class="input-control select" id="sex" style="width:60px">
+                        <select>
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label>所属公司</label>
+                    <!-- Radio button -->
+                    <div class="input-control select" style="width:120px">
+                        <select id="comselect" >
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <input type="button" id="actionBtn" onclick="doAction()" class="place-right" value="查询"/></div>
+                </div>
+            </div>
+        </div>
+
+    </p>
+    <span class="dialog-close-button"></span>
+    <script>
+
+    </script>
+</div>
+
+
+</body>
+</html>

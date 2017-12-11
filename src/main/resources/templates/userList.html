@@ -15,122 +15,267 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/metro.min.css"/>
-    <link rel="stylesheet" href="/css/metro-icons.min.css"/>
-    <link rel="stylesheet" href="/css/metro-responsive.min.css"/>
-    <link rel="stylesheet" href="/css/metro-schemes.min.css"/>
-    <script src="/js/metro.min.js"></script>
+    <script src="/js/bootstrap-notify.min.js"/>
+    <style>
+        .d-menu li a {
+            min-width: 8rem;
+        }
+    </style>
     <script>
         //<![CDATA[
-        $(function () {
-            $.ajaxSetup({
-                async: false
-            });
-            $.post("/userListInfo",{},function (data) {
-                $.ajaxSetup({
-                    async: true
-                });
-                if(data.success){
-                    $("#comselect").empty();
-                    $(data.coms).each(function(i,e){
-                        $("#comselect").append("<option value='"+e.name+"'>"+e.value+"</option>");
-                    });
-                }
-            });
-        })
         function clickSearch() {
-            console.log("1")
-            metroDialog.toggle('#dialog9');
-            $("#dialogTitle").text("设置查询条件");
-            $("#actionBtn").text("增加");
+            $('#myModal').modal({
+                show:true,
+                keyboard:false,
+                backdrop:"static"
+            });
+            $("#myModalLabel").text("设置查询条件");
+            $("#actionBtn").val("查询");
             $("#actionBtn").attr("action","search");
         }
         function clickAdd() {
-            console.log("1")
-            metroDialog.toggle('#dialog9');
-            $("#dialogTitle").text("新增用户");
-            $("#actionBtn").text("增加");
+            $('#myModal').modal({
+                show:true,
+                keyboard:false,
+                backdrop:"static"
+            });
+            $("#myModalLabel").text("添加员工");
+            $("#actionBtn").val("增加");
             $("#actionBtn").attr("action","add");
         }
+        function doAction(){
+            var action = $("#actionBtn").attr("action");
+            if(action == "add"){
+                if($("#modalname").val()==''){
+                    $.notify({
+                        icon: 'glyphicon glyphicon-warning-sign',
+                        title: '添加错误',
+                        message: '员工名称不能为空',
+                    },{
+                        type: "danger",
+                        z_index:999999
+                    });
+                    return;
+                }
+                if($("#modalidCard").val()==''){
+                    $.notify({
+                        icon: 'glyphicon glyphicon-warning-sign',
+                        title: '添加错误',
+                        message: '员工身份证不能为空',
+                    },{
+                        type: "danger",
+                        z_index:999999
+                    });
+                    return;
+                }
 
+                if($("#modalphone").val()==''){
+                    $.notify({
+                        icon: 'glyphicon glyphicon-warning-sign',
+                        title: '添加错误',
+                        message: '员工手机不能为空',
+                    },{
+                        type: "danger",
+                        z_index:999999
+                    });
+                    return;
+                }
+                if($("#modalcomselect").val()=='empty'){
+                    $.notify({
+                        icon: 'glyphicon glyphicon-warning-sign',
+                        title: '添加错误',
+                        message: '请选择公司',
+                    },{
+                        type: "danger",
+                        z_index:999999
+                    });
+                    return;
+                }
+                $.post("/addemployee",{
+                    "name":$("#modalname").val(),
+                    "phone":$("#modalphone").val(),
+                    "idCard":$("#modalidCard").val(),
+                    "sex":$("#modalsex").val(),
+                    "comselect":$("#modalcomselect").val()
+                },function (data) {
+                    if(!data.success){
+                        $.notify({
+                            icon: 'glyphicon glyphicon-warning-sign',
+                            title: '添加错误',
+                            message: data.msg,
+                        },{
+                            type: "danger",
+                            z_index:999999
+                        });
+                    }else{
+
+                        $.notify({
+                            icon: 'glyphicon glyphicon-warning-sign',
+                            title: '添加成功',
+                            message: "添加成功",
+                        },{
+                            type: "success",
+                            z_index:999999
+                        });
+                        searchEmployee();
+                    }
+                })
+            }else{
+                searchEmployee();
+            }
+        }
+
+        function searchEmployee(){
+            $.post("/queryEmployee",{
+                "name":$("#modalname").val(),
+                "phone":$("#modalphone").val(),
+                "idCard":$("#modalidCard").val(),
+                "sex":$("#modalsex").val(),
+                "comselect":$("#modalcomselect").val()
+            },function (data) {
+                if(!data.success){
+                    $.Notify({
+                        caption: '查询错误！',
+                        content: data.msg,
+                        type: 'alert'
+                    });
+                }else{
+                    var htmlstr = "";
+                    $(data.list).each(function (i,v) {
+                        htmlstr+="<tr>" +
+                                "<td>"+v.name+"</td>"+
+                                "<td>"+(v.sex?"男":"女")+"</td>"+
+                                "<td style=\"white-space:nowrap;overflow: hidden;text-overflow:ellipsis\">"+v.phone+"</td>"+
+                                "<td>"+v.company.name+"</td>"+
+                                "<td>"+
+                                "<button class=\"button dropdown-toggle\">查看</button>"+
+                                "</td>"+
+                                "</tr>";
+                    });
+                    $("#employListTr").html(htmlstr);
+                }
+            });
+        }
         //]]>
     </script>
+
+
+
 </head>
 <body>
-
-<div class="container page-content">
-    <h3>
-        <span class="mif-arrow-left"></span>
-        &nbsp;员工管理
-    </h3>
-</div>
-<div class="app-bar" data-role="appbar">
-    <button id="addBar" class="button lighten place-right">
-        <span class="mif-plus" onclick="clickAdd()"></span>添加</button>
-    <button id="searchBar" class="button lighten place-right">
-        <span class="mif-search" onclick="clickSearch()"></span>查询</button>
-</div>
-
-<div data-role="dialog" id="dialog9" class=" dialog"
-     data-close-button="true" data-overlay="true" data-overlay-color="op-dark"
-     data-overlay-click-close="true"
-     style="width: auto; height: auto;  ">
-    <!--padding20-->
-    <!--left: 267px; top: 372px;-->
-    <h3 id="dialogTitle">设置查询条件</h3>
-    <p>
-    <div class="example" data-text="">
-        <div class="grid">
-            <div class="row">
-                <div class="cell">
-                    <label>员工姓名</label>
-                    <div class="input-control text full-size">
-                        <input type="text" id="name"/>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="cell">
-                    <label>员工电话</label>
-                    <div class="input-control password full-size">
-                        <input type="text" id="phone"/>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="cell">
-                    <label>员工性别</label>
-                    <!-- Radio button -->
-                    <div class="input-control select" style="width:60px">
-                        <select>
-                            <option>男</option>
-                            <option>女</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="cell">
-                    <label>所属公司</label>
-                    <!-- Radio button -->
-                    <div class="input-control select" id="comselect" style="width:120px">
-                        <select>
-                            <option>男</option>
-                            <option>女</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="cell">
-                    <input type="button" id="actionBtn" class="place-right" value="查询"/></div>
-                </div>
-            </div>
+<nav class="navbar navbar-default ">
+    <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">员工管理</a>
         </div>
 
-    </p>
-    <span class="dialog-close-button"></span>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:clickAdd()">添加</a></li>
+                <li><a href="javascript:clickSearch()">查询</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<!-- Default -->
+<div class="panel" style="margin:4px">
+    <div class="heading">
+        <span class="title">员工列表</span>
+    </div>
+    <div class="content">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="sortable-column">名称</th>
+                <!--<th class="sortable-column">身份证</th>-->
+                <th class="sortable-column">性别</th>
+                <th class="sortable-column">电话</th>
+                <th class="sortable-column">所属公司</th>
+                <th class="sortable-column">操作</th>
+            </tr>
+            </thead>
+            <tbody id="employListTr">
+
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="modalname">员工名称</label>
+                    <input type="text" class="form-control" id="modalname"/>
+                </div>
+                <div class="form-group">
+                    <label for="modalidCard">身份证</label>
+                    <input type="text" class="form-control" id="modalidCard" />
+                </div>
+                <div class="form-group">
+                    <label for="modalphone">员工电话</label>
+                    <input type="file" class="form-control" id="modalphone"/>
+                </div>
+                <div class="form-group">
+                    <label for="modalsex">性别</label>
+                    <select id="modalsex" class="form-control">
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+                <div  class="form-group">
+                    <label for="modalcomselect">所属公司</label>
+                    <select id="modalcomselect" class="form-control">
+                        <option></option>
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="actionBtn" onclick="doAction()" class="btn btn-default" /></div>
+
+            </div>
+        </div>
+    </div>
 </body>
+<script>
+    //<![CDATA[
+    $(function () {
+        $.ajaxSetup({
+            async: false
+        });
+        $.post("/userListInfo",{},function (data) {
+            console.log(data);
+            $.ajaxSetup({
+                async: true
+            });
+            if(data && data.success){
+                $("#comselect").empty().append("<option value='empty'></option>");
+                $(data.coms).each(function(i,e){
+                    $("#comselect").append("<option value='"+e.id+"'>"+e.name+"</option>");
+                });
+            }
+        });
+        searchEmployee();
+    })
+    //]]>
+</script>
+
+
+
 </html>

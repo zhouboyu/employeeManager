@@ -1,6 +1,7 @@
 package prev.cxw.employ.dao;
 
-import org.apache.ibatis.annotations.Select;
+import com.google.common.collect.Lists;
+//import org.apache.ibatis.annotations.Select;
 import prev.cxw.employ.model.dto.Admin;
 
 import java.util.List;
@@ -14,6 +15,12 @@ import java.util.List;
  */
 
 public interface AdminDAO {
-    @Select("select * from Admin")
-    List<Admin> searchAll();
+//    @Select("select * from Admin")
+//    List<Admin> searchAll();
+
+    List<Admin> admins = Lists.newArrayList(new Admin(1,"admin","admin"));
+
+    default List<Admin> searchAll(){
+        return admins;
+    }
 }

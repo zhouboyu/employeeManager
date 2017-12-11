@@ -5,128 +5,320 @@
     <title>spring boot index</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <title>spring boot index</title>
+
+    <title></title>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/css/homestyle.css"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/metro.min.css"/>
-    <link rel="stylesheet" href="/css/metro-icons.min.css"/>
-    <link rel="stylesheet" href="/css/metro-responsive.min.css"/>
-    <link rel="stylesheet" href="/css/metro-schemes.min.css"/>
-    <script src="../static/js/metro.min.js"></script>
-    <style>
-        /*body{*/
-            /*background-color: #FFFFFF*/
-        /*}*/
-    </style>
-
+    <script src="/js/bootstrap-notify.min.js"></script>
+    <script src="/js/user.js"/>
     <script>
+        //<![CDATA[
         $(function () {
-            $("#companyDiv").click(function(){
-
+            $.ajaxSetup({
+                async: false
             });
-
-            $("#employeeDiv").click(function(){
-                location.href="/toUserList";
+            //获取用户
+            $.post("/userListInfo",{},function (data) {
+                console.log(data);
+                $.ajaxSetup({
+                    async: true
+                });
+                if(data && data.success){
+                    $("#modalcomselect").empty().append("<option value='empty'></option>");
+                    $(data.coms).each(function(i,e){
+                        $("#modalcomselect").append("<option value='"+e.id+"'>"+e.name+"</option>");
+                    });
+                }
             });
+            //searchEmployee();
         })
+        
+        function showEmployContent() {
+            
+        }
+        //]]>
+    </script>
+    <script type="text/javascript">
+        var trigger,overlay,isClosed;
+        $(document).ready(function () {
 
+            trigger = $('.hamburger');
+            overlay = $('.overlay');
+            isClosed = false;
+
+            trigger.click(function () {
+                hamburger_cross();
+            });
+
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('#wrapper').toggleClass('toggled');
+            });
+        });
+        function hamburger_cross() {
+            console.log(isClosed);
+            if (isClosed == true) {
+                overlay.hide();
+                trigger.removeClass('is-open');
+                trigger.addClass('is-closed');
+                isClosed = false;
+            } else {
+                overlay.show();
+                trigger.removeClass('is-closed');
+                trigger.addClass('is-open');
+                isClosed = true;
+            }
+        }
     </script>
 </head>
 <body>
-    <div class="tile-area tile-area-scheme-dark fg-white" style="height: 100%; max-height: 100% !important;">
-    <div class="container page-content">
-        <h1>
-            <!--<a href="index.html" class="nav-button transform"><span></span></a>-->
-            <span class="mif-arrow-left"></span>
-            &nbsp;面板
-        </h1>
-    </div>
-    <div class="tile-area no-padding">
-        <div class="tile-group double" style="left: 0px;">
-            <span class="tile-group-title">General</span>
+<div id="wrapper">
+    <div class="overlay"></div>
 
-            <div class="tile-container">
-                <div class="tile bg-indigo fg-white" id="employeeDiv"
-                   data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-users"></span>
-                        <span class="tile-label">员工管理</span>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="javascript:void(0)">
+                    管理菜单
+                </a>
+            </li>
+            <li>
+                <a href="javascript:$('#userContent').show();$('#companyContent').hide();$(trigger).trigger('click');"><i class="glyphicon glyphicon-user"></i> 员工管理</a>
+            </li>
+            <li>
+                <a href="javascript:$('#companyContent').show();$('#userContent').hide();$(trigger).trigger('click');"><i class="fa fa-fw fa-bank"></i> 公司管理</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-fw fa-cog"></i>系统设置</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2" id="detailPanal">
+                    <div>
+                        <div id="userContent">
+                            <nav class="navbar navbar-default ">
+                                <!---->
+                                <div class="container-fluid">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="#">员工管理</a>
+                                    </div>
+
+                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+                                        <ul class="nav navbar-nav">
+                                            <li><a href="javascript:clickAdd()">添加</a></li>
+                                            <li><a href="javascript:clickSearch()">查询</a></li>
+                                        </ul>
+                                    </div><!-- /.navbar-collapse -->
+                                </div>
+                            </nav>
+                            <!-- Default margin:4px-->
+                            <div class="panel" style="" id="user">
+                                <div class="content">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="sortable-column">名称</th>
+                                            <th class="sortable-column">性别</th>
+                                            <th class="sortable-column">电话</th>
+                                            <th class="sortable-column">所属公司</th>
+                                            <th class="sortable-column">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="employListTr">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="userModalTtile">Modal title</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="modalname">员工名称</label>
+                                                <input type="text" class="form-control" id="modalname"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="modalidCard">身份证</label>
+                                                <input type="text" class="form-control" id="modalidCard" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="modalphone">员工电话</label>
+                                                <input type="text" class="form-control" id="modalphone"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="modalsex">性别</label>
+                                                <select id="modalsex" class="form-control">
+                                                    <option value="1">男</option>
+                                                    <option value="2">女</option>
+                                                </select>
+                                            </div>
+                                            <div  class="form-group">
+                                                <label for="modalcomselect">所属公司</label>
+                                                <select id="modalcomselect" class="form-control">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" id="actionBtn" onclick="doAction()" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="companyContent" style="display: none">
+
+
+
+
+                            <nav class="navbar navbar-default">
+                                <div class="container-fluid">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-4" aria-expanded="true">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="#">公司管理</a>
+                                    </div>
+                                    <div class="navbar-collapse collapse in" id="bs-example-navbar-collapse-4" aria-expanded="true" style="">
+                                        <form class="navbar-form navbar-left">
+                                            <button type="button" class="btn btn-default" onclick="companyClickSearch()">查询</button>
+                                            <button type="button" class="btn btn-default" onclick="companyClickAdd()">增加</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </nav>
+
+
+                            <!-- Default margin:4px-->
+                            <div class="panel" style="" id="complay">
+                                <div class="content">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="sortable-column">公司名称</th>
+                                            <th class="sortable-column">联系电话</th>
+                                            <th class="sortable-column">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="companyDaoListTr">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="companyModalTitle">Modal title</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="modalcompanyname">公司名称</label>
+                                                <input type="text" class="form-control" id="modalcompanyname"/>
+                                            </div>
+                                            <div class="form-group" div="modalcompanyaddressdiv">
+                                                <label for="modalcompanyaddress">公司地址</label>
+                                                <input type="text" class="form-control" id="modalcompanyaddress"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="modalcompanyphone">联系电话</label>
+                                                <input type="text" class="form-control" id="modalcompanyphone"/>
+                                            </div>
+                                            <div class="form-group" id="modalcompanydetaildiv">
+                                                <label for="modalcompanydetail">公司简介</label>
+                                                <textarea class="form-control" rows="3" id="modalcompanydetail"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" id="companyactionBtn" onclick="companydoAction()" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="modal fade" id="companyInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="companyInfoModalTitle">Modal title</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="companyInfoname">公司名称</label>
+                                                <input type="text" class="form-control" id="companyInfoname"/>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label for="companyInfoaddress">公司地址</label>
+                                                <input type="text" class="form-control" id="companyInfoaddress"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="companyInfophone">联系电话</label>
+                                                <input type="text" class="form-control" id="companyInfophone"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="companyInfodetail">公司简介</label>
+                                                <textarea class="form-control" rows="3" id="companyInfodetail"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" id="companyactionBtn" onclick="companydoAction()" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
-                <div class="tile bg-darkBlue fg-white" data-role="tile" id="companyDiv"
-                     style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-widgets"></span>
-                        <span class="tile-label">公司管理</span>
-                    </div>
-
-                </div>
-
-
-
             </div>
         </div>
-        <div class="tile-group double">
-            <span class="tile-group-title">敬请期待</span>
-            <div class="tile-small bg-blue" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                <div class="tile-content iconic">
-                    <img src="/img/outlook.png" class="icon"/>
-                </div>
-            </div>
-            <div class="tile-small bg-darkBlue" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                <div class="tile-content iconic">
-                    <img src="/img/word.png" class="icon"/>
-                </div>
-            </div>
-            <div class="tile-small bg-green" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                <div class="tile-content iconic">
-                    <img src="/img/excel.png" class="icon"/>
-                </div>
-            </div>
-            <div class="tile-small bg-red" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                <div class="tile-content iconic">
-                    <img src="/img/access.png" class="icon"/>
-                </div>
-            </div>
-            <div class="tile-small bg-orange" data-role="tile" style="opacity: 1; transform: scale(1); transition: all 0.3s ease 0s;">
-                <div class="tile-content iconic">
-                    <img src="/img/powerpoint.png" class="icon"/>
-                </div>
-            </div>
-            <div class="tile-small bg-amber fg-white" data-role="tile">
-                <div class="tile-content iconic">
-                    <span class="icon mif-video-camera"></span>
-                </div>
-            </div>
-            <div class="tile-small bg-green fg-white" data-role="tile">
-                <div class="tile-content iconic">
-                    <span class="icon mif-gamepad"></span>
-                </div>
-            </div>
-            <div class="tile-small bg-pink fg-white" data-role="tile">
-                <div class="tile-content iconic">
-                    <span class="icon mif-headphones"></span>
-                </div>
-            </div>
-            <div class="tile-small bg-yellow fg-white" data-role="tile">
-                <div class="tile-content iconic">
-                    <span class="icon mif-lock"></span>
-                </div>
-            </div>
-        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
 
 
-    </div>
-    </div>
 
 </body>
 </html>

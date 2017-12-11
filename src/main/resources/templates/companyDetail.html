@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>员工信息</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <title></title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="/js/bootstrap-notify.min.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        function modifyCompany(){
+            if($("#name").val() == ""){
+                $.notify({
+                    icon: 'glyphicon glyphicon-warning-sign',
+                    title: '添加错误',
+                    message: '公司名称不能为空',
+                },{
+                    type: "danger",
+                    z_index:999999
+                });
+                return;
+            }
+            if($("#address").val() == ""){
+                $.notify({
+                    icon: 'glyphicon glyphicon-warning-sign',
+                    title: '添加错误',
+                    message: '公司地址不能为空',
+                },{
+                    type: "danger",
+                    z_index:999999
+                });
+                return;
+            }
+            if($("#phone").val() == ""){
+                $.notify({
+                    icon: 'glyphicon glyphicon-warning-sign',
+                    title: '添加错误',
+                    message: '公司电话不能为空',
+                },{
+                    type: "danger",
+                    z_index:999999
+                });
+                return;
+            }
+            $("#companyForm").attr("action","/saveCompany");
+            $("#companyForm").submit();
+        }
+
+        var leaveEid;
+        function toLeave(e) {
+            console.log(e)
+            //id,name,idCard
+            //th:eid="${employee.id}" th:ename="${employee.name}" th:eidCard="${employee.idCard}"
+            leaveEid = $(e).attr("eid");
+            $('#mySmallModalLabel').text("确认要让员工["+$(e).attr("ename")+"]身份证["+$(e).attr("eidCard")+"]员工离职吗");
+            $("#entryBtn").hide();
+            $("#leaveConfirmBtn").show();
+            $("#cancelBtn").show();
+            $('#confirmModal').modal({
+                show:true,
+                keyboard:false,
+                backdrop:"static"
+            });
+        }
+
+
+        function doLeave() {
+            $.ajaxSetup({
+                async: false
+            });
+            $.get("/doLeave",
+                    {"eid":leaveEid},
+                    function(data) {
+                        if(data.success){
+                            alert("离职成功");
+                            location.href="/toCompanyDetail?cid="+$("#id").val();
+                        }else{
+                            $.notify({
+                                icon: 'glyphicon glyphicon-warning-sign',
+                                title: '离职失败',
+                                message: data.msg,
+                            },{
+                                type: "danger",
+                                z_index:999999
+                            });
+                        }
+                    }
+            );
+            $.ajaxSetup({
+                async: true
+            });
+        }
+
+        function toEntry() {
+            $("#employeeModal").modal({
+                show:true,
+                keyboard:false,
+                backdrop:"static"
+            });
+        }
+
+        function searchEmployee(){
+            if($("#seidCard").val()==""){
+                return;
+            }
+            $.get("/queryEmployee",{"idCard":$("#seidCard").val()},function (data) {
+                if(data.success){
+                    var tableHtml = "";
+                    $(data.list).each(function (i,v) {
+                        tableHtml+="<tr>"+
+                                "<td>"+v.name+"</td>"+
+                                "<td>"+v.idCard+"</td>"+
+                                "<td>"+v.phone+"</td>"+
+                                "<td><button class='btn btn-default' onclick='chooseEmployee(\""+v.id+"\",\""+v.name+"\")'>选择</button></td>"+
+                                "</tr>";
+
+                    })
+                    $("#employeeListTb").html(tableHtml);
+//                    $("#employeeModal").modal({
+//                        show:true,
+//                        keyboard:false,
+//                        backdrop:"static"
+//                    });
+                }
+            });
+        }
+        var entryEid;
+        function chooseEmployee(eid,ename) {
+            if($("#eposition").val()==""){
+                $.notify({
+                    icon: 'glyphicon glyphicon-warning-sign',
+                    title: '无法入职',
+                    message:"请输入职位",
+                },{
+                    type: "danger",
+                    z_index:999999
+                });
+                return;
+            }
+            entryEid = eid;
+            $('#mySmallModalLabel').text("确认让员工["+ename+"]入职吗");
+            $("#entryBtn").show();
+            $("#leaveConfirmBtn").hide();
+            $("#cancelBtn").show();
+            $('#confirmModal').modal({
+                show:true,
+                keyboard:false,
+                backdrop:"static"
+            });
+            $('#employeeModal').modal('toggle')
+        }
+
+        function doEntry() {
+            $.ajaxSetup({
+                async: false
+            });
+
+            $.post("/doEntry",{"cid":$("#id").val(),"eid":entryEid,"position":$("#eposition").val()},
+                    function (data) {
+                        if(data.success){
+                            alert("入职成功");
+                            location.href="/toCompanyDetail?cid="+$("#id").val();
+                        }else{
+                            $.notify({
+                                icon: 'glyphicon glyphicon-warning-sign',
+                                title: '入职失败',
+                                message: data.msg,
+                            },{
+                                type: "danger",
+                                z_index:999999
+                            });
+                        }
+                    }
+            )
+        }
+        //]]>
+    </script>
+</head>
+<body>
+<div id="wrapper">
+    <ol class="breadcrumb">
+        <li><a href="/tohome">主页</a></li>
+        <li class="active">公司详情</li>
+    </ol>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">公司信息</div>
+        <div class="panel-body">
+            <form method="post" id="companyForm">
+                <input type="hidden" class="form-control" id="id" name="id" th:value="${company.id}"/>
+                <div class="form-group">
+                    <label for="name">公司名称</label>
+                    <input type="text" class="form-control" id="name" name="name" th:value="${company.name}" placeholder="公司名称"/>
+                </div>
+                <div class="form-group">
+                    <label for="address">公司地址</label>
+                    <input type="text" class="form-control" id="address" name="address" th:value="${company.address}"  placeholder="公司地址"/>
+                </div>
+                <div class="form-group">
+                    <label for="phone">联系电话</label>
+                    <input type="text" class="form-control" id="phone" name="phone" th:value="${company.phone}" placeholder="公司地址"/>
+                </div>
+                <div class="form-group">
+                    <label for="detail">简介</label>
+                    <textarea class="form-control" id="detail" name="detail" rows="3" th:value="${company.detail}"></textarea>
+                </div>
+
+                <!--<button type="button" class="btn btn-default">修改</button>-->
+                <button type="button" class="btn btn-default" onclick="modifyCompany()">修改</button>
+                <button type="button" class="btn btn-success" onclick="toEntry()">员工入职</button>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">工作信息</div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="sortable-column">姓名</th>
+                    <th class="sortable-column">性别</th>
+                    <th class="sortable-column">职务</th>
+                    <th class="sortable-column">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr  th:each="employee : ${elists}">
+                    <td th:text="${employee.name}"></td>
+                    <td th:text="${employee.sex}"></td>
+                    <td th:text="${employee.position}"></td>
+                    <td><button class="btn btn-default"
+                                th:attr="eid=${employee.id},ename=${employee.name},eidCard=${employee.idCard}"
+                                onclick="toLeave(this)">离职</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" id="confirmModal" role="dialog" aria-labelledby="confirmModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">Small modal</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="leaveConfirmBtn" class="btn btn-success" onclick="doLeave()">确认</button>
+                <button type="button" id="entryBtn" class="btn btn-success" onclick="doEntry()">确认</button>
+                <button type="button" id="cancelBtn" class="btn btn-default" onclick="$('#confirmModal').modal('toggle')">取消</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="employeeModalLabel">Small modal</h4>
+            </div>
+            <div class="modal-content">
+                <div class="panel panel-default">
+                    <div class="panel-heading">查询-员工身份证</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="seidCard" name="seidCard" placeholder="请输入身份证"/>
+                            <button class="btn btn-default" onclick="searchEmployee()">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">输入-员工职位</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="eposition" name="eposition" placeholder="请输入员工职位"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">员工列表</div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="sortable-column">员工姓名</th>
+                                <th class="sortable-column">身份证</th>
+                                <th class="sortable-column">电话</th>
+                                <th class="sortable-column">选择</th>
+                            </tr>
+                            </thead>
+                            <tbody id="employeeListTb">
+
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<!-- /#wrapper -->
+
+
+
+</body>
+</html>

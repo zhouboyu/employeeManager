@@ -1,7 +1,7 @@
 package prev.cxw.employ;
 
 import com.alibaba.fastjson.JSON;
-import org.mybatis.spring.annotation.MapperScan;
+//import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +21,7 @@ import java.util.Date;
  */
 @RestController
 @EnableAutoConfiguration
-@MapperScan("prev.cxw.employ.dao")
+//@MapperScan("prev.cxw.employ.dao")
 @ComponentScan(basePackages = {"prev.cxw.employ"})
 public class Application {
 

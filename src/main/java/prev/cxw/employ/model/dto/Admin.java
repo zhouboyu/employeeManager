@@ -14,4 +14,14 @@ public class Admin {
     private long id;
     private String account;
     private String password;
+
+    public Admin(){
+
+    }
+
+    public Admin(long id,String account,String password){
+        this.id = id;
+        this.account = account;
+        this.password = password;
+    }
 }

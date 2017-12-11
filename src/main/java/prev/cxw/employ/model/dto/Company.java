@@ -17,4 +17,17 @@ public class Company {
     private String phone;
     private String detail;
     private int isDeleted;
+
+    public Company(){
+
+    }
+
+    public Company(long id,String name,String address,String phone,String detail){
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.detail = detail;
+    }
+
 }
